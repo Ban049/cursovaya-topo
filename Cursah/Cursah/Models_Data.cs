@@ -5,18 +5,19 @@ using System.Text;
 namespace Cursah
 {
 
-        public record User(int Id, string Username, string Role);
-        public record Note(int Id, int UserId, string Title, string Content, DateTime CreatedAt);
-        public record SystemLog(int Id, string Level, string Module, string Message, DateTime CreatedAt);
+    public static class Roles
+    {
+        public const string User = "User";
+        public const string Admin = "Admin";
+        public const string WatchdogAdmin = "WatchdogAdmin";
+    }
 
-        public class AppException : Exception
-        {
-            public string ErrorCode { get; }
-            public int Severity { get; }
-            public AppException(string code, string message, int severity = 1) : base(message)
-            {
-                ErrorCode = code; Severity = severity;
-            }
-        }    
-   
+    public record User(int Id, string Username, string Role);
+
+    public class AppException : Exception
+    {
+        public string ErrorCode { get; }
+        public AppException(string code, string message) : base(message) => ErrorCode = code;
+    }
+
 }
