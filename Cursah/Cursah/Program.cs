@@ -18,6 +18,9 @@ class Program
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
+        // Проверка и применение обновлений при запуске
+        UpdateManager.ApplyPendingUpdate();
+
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         ConnStr = config.GetConnectionString("DefaultConnection");
 
@@ -50,21 +53,31 @@ class Program
         switch (cmd)
         {
             case "login":
-                CurrentUser = Auth!.Login(args["u"], args["p"]);
+                CurrentUser = Auth!.Login(args.GetValueOrDefault("u", ""), args.GetValueOrDefault("p", ""));
+                Console.WriteLine($"Добро пожаловать, {CurrentUser.Username}!");
                 break;
+
             case "logout":
-                Auth!.Logout(); CurrentUser = null;
+                Auth!.Logout();
+                CurrentUser = null;
+                Console.WriteLine("Вы вышли из системы.");
+                // По ТЗ: если есть обновление, при логауте программа завершается для обновления
+                if (File.Exists("update.pending"))
+                {
+                    Console.WriteLine("Ожидает установка обновления. Завершение работы...");
+                    Environment.Exit(0);
+                }
                 break;
 
             case "note":
                 Check(Roles.User);
-                if (sub == "add") 
+                if (sub == "add")
                     Notes!.Add(CurrentUser!.Id, args["t"], args["c"]);
-                else if (sub == "edit") 
+                else if (sub == "edit")
                     Notes!.Edit(CurrentUser!.Id, int.Parse(args["id"]), args["t"], args["c"]);
-                else if (sub == "list") 
+                else if (sub == "list")
                     Notes!.List(CurrentUser!.Id);
-                else if (sub == "del") 
+                else if (sub == "del")
                     Notes!.Delete(CurrentUser!.Id, int.Parse(args["id"]));
                 break;
 
@@ -75,23 +88,31 @@ class Program
                 else if (sub == "del") Admin!.DeleteUser(int.Parse(args["id"]));
                 break;
 
+            case "system":
+                Check(Roles.Admin);
+                if (sub == "logs") ViewLogs(args);
+                else if (sub == "update") UpdateManager.PrepareUpdate();
+                break;
+
             case "watchdog":
                 Check(Roles.WatchdogAdmin);
                 if (sub == "run") Watchdog!.Start();
                 else if (sub == "stop") Watchdog!.Stop();
                 else if (sub == "config") Watchdog!.SetConfig(int.Parse(args["i"]));
+                else if (sub == "status") Watchdog!.Status();
+                else if (sub == "list") Watchdog!.ListMetrics(args.ContainsKey("n") ? int.Parse(args["n"]) : 5);
                 break;
 
             case "help": ShowHelp(); break;
             case "exit": Environment.Exit(0); break;
-            default: Console.WriteLine("Неизвестная команда."); break;
+            default: Console.WriteLine("Неизвестная команда. Введите help для справки."); break;
         }
     }
 
     static void Check(string role)
     {
         if (CurrentUser == null) throw new AppException("401", "Нужен логин.");
-        if (CurrentUser.Role != role) throw new AppException("403", "Нет прав.");
+        if (CurrentUser.Role != role) throw new AppException("403", "Нет прав для выполнения этой команды.");
     }
 
     static Dictionary<string, string> Parse(string s)
@@ -111,12 +132,31 @@ class Program
 
     static void ShowHelp()
     {
-        Console.WriteLine("Доступные команды:");
+        Console.WriteLine("--- ДОСТУПНЫЕ КОМАНДЫ ---");
+        Console.WriteLine("Общие:");
+        Console.WriteLine("  login -u [Username] -p [Password]");
+        Console.WriteLine("  logout");
+        Console.WriteLine("  help");
+        Console.WriteLine("  exit");
+        Console.WriteLine("\nПользователь (User):");
+        Console.WriteLine("  note list");
+        Console.WriteLine("  note add -t \"Заголовок\" -c \"Содержимое\"");
+        Console.WriteLine("  note edit -id [ID] -t \"Заголовок\" -c \"Содержимое\"");
+        Console.WriteLine("  note del -id [ID]");
+        Console.WriteLine("\nАдминистратор (Admin):");
         Console.WriteLine("  user add -u [name] -p [pass] -r [User|Admin|WatchdogAdmin]");
-        Console.WriteLine("  user list | user del -id [id]");
-        Console.WriteLine("  note add -t \"title\" -c \"text\" | note edit -id [id] -t \"..\" -c \"..\"");
-        Console.WriteLine("  watchdog run | stop | config -i [sec]");
+        Console.WriteLine("  user list");
+        Console.WriteLine("  user del -id [id]");
+        Console.WriteLine("  system logs -n [кол-во] (Посмотреть последние логи)");
+        Console.WriteLine("  system update (Подготовка системы к обновлению)");
+        Console.WriteLine("\nАдминистратор мониторинга (WatchdogAdmin):");
+        Console.WriteLine("  watchdog run");
+        Console.WriteLine("  watchdog stop");
+        Console.WriteLine("  watchdog config -i [секунды]");
+        Console.WriteLine("  watchdog status");
+        Console.WriteLine("  watchdog list -n [кол-во] (Посмотреть собранные метрики)");
     }
+
     static void ViewLogs(Dictionary<string, string> args)
     {
         int limit = int.TryParse(args.GetValueOrDefault("n", "5"), out var val) ? val : 5;
@@ -125,8 +165,9 @@ class Program
         var cmd = new SqlCommand("SELECT TOP(@n) CreatedAt, Level, Message FROM SystemLogs ORDER BY CreatedAt DESC", conn);
         cmd.Parameters.AddWithValue("@n", limit);
         using var r = cmd.ExecuteReader();
-        while (r.Read()) Console.WriteLine($"{r.GetDateTime(0):T} [{r.GetString(1)}] {r.GetString(2)}");
-
+        Console.WriteLine("\nДата/Время | Уровень | Сообщение");
+        Console.WriteLine("----------------------------------");
+        while (r.Read()) Console.WriteLine($"{r.GetDateTime(0):G} | [{r.GetString(1)}] | {r.GetString(2)}");
     }
 
 }
