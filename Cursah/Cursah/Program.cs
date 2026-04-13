@@ -18,7 +18,7 @@ class Program
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-        // Проверка и применение обновлений при запуске
+
         UpdateManager.ApplyPendingUpdate();
 
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
