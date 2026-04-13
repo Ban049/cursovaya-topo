@@ -39,10 +39,11 @@ namespace Cursah
         {
             using var conn = new SqlConnection(_cs);
             conn.Open();
-            var cmd = new SqlCommand("SELECT Id, Title FROM Notes WHERE UserId = @u", conn);
+            var cmd = new SqlCommand("SELECT Id, Title, Content FROM Notes WHERE UserId = @u", conn);
             cmd.Parameters.AddWithValue("@u", uid);
             using var r = cmd.ExecuteReader();
-            while (r.Read()) Console.WriteLine($"[{r.GetInt32(0)}] {r.GetString(1)}");
+            while (r.Read()) 
+                Console.WriteLine($"[{r.GetInt32(0)}] {r.GetString(1)} \n Содержимое: {r.GetString(2)}");
         }
 
         public void Delete(int uid, int noteId)
