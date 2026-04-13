@@ -58,10 +58,14 @@ class Program
 
             case "note":
                 Check(Roles.User);
-                if (sub == "add") Notes!.Add(CurrentUser!.Id, args["t"], args["c"]);
-                else if (sub == "edit") Notes!.Edit(CurrentUser!.Id, int.Parse(args["id"]), args["t"], args["c"]);
-                else if (sub == "list") Notes!.List(CurrentUser!.Id);
-                else if (sub == "del") Notes!.Delete(CurrentUser!.Id, int.Parse(args["id"]));
+                if (sub == "add") 
+                    Notes!.Add(CurrentUser!.Id, args["t"], args["c"]);
+                else if (sub == "edit") 
+                    Notes!.Edit(CurrentUser!.Id, int.Parse(args["id"]), args["t"], args["c"]);
+                else if (sub == "list") 
+                    Notes!.List(CurrentUser!.Id);
+                else if (sub == "del") 
+                    Notes!.Delete(CurrentUser!.Id, int.Parse(args["id"]));
                 break;
 
             case "user":
