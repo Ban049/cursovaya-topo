@@ -1,7 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cursah
 {
@@ -30,7 +28,8 @@ namespace Cursah
             cmd.Parameters.AddWithValue("@t", title);
             cmd.Parameters.AddWithValue("@c", content);
             cmd.ExecuteNonQuery();
-            Console.WriteLine("Заметка создана.");
+
+            Console.WriteLine($"[УСПЕХ] Заметка '{title}' успешно создана.");
         }
 
         /// <summary>
@@ -48,9 +47,10 @@ namespace Cursah
 
             if (cmd.ExecuteNonQuery() == 0)
             {
-                throw new AppException("404", "Заметка не найдена.");
+                throw new AppException("404", "Заметка не найдена или у вас нет прав на ее редактирование.");
             }
-            Console.WriteLine("Заметка обновлена.");
+
+            Console.WriteLine($"[УСПЕХ] Заметка (ID: {noteId}) успешно обновлена.");
         }
 
         /// <summary>
@@ -64,10 +64,23 @@ namespace Cursah
             cmd.Parameters.AddWithValue("@u", userId);
 
             using var reader = cmd.ExecuteReader();
+            bool hasNotes = false;
+
+            Console.WriteLine("\n--- Ваши заметки ---");
             while (reader.Read())
             {
-                Console.WriteLine($"[{reader.GetInt32(0)}] {reader.GetString(1)} \n Содержимое: {reader.GetString(2)}");
+                hasNotes = true;
+                Console.WriteLine($"[ID: {reader.GetInt32(0)}] {reader.GetString(1)}");
+                Console.WriteLine($"Содержимое: {reader.GetString(2)}");
+                Console.WriteLine("--------------------");
             }
+
+            if (!hasNotes)
+            {
+                Console.WriteLine("У вас пока нет ни одной заметки. Используйте 'note add', чтобы создать первую.");
+                Console.WriteLine("--------------------");
+            }
+            Console.WriteLine(); // Пустая строка для красоты вывода
         }
 
         /// <summary>
@@ -83,9 +96,10 @@ namespace Cursah
 
             if (cmd.ExecuteNonQuery() == 0)
             {
-                throw new AppException("404", "Заметка не найдена.");
+                throw new AppException("404", "Заметка не найдена или у вас нет прав на ее удаление.");
             }
-            Console.WriteLine("Удалено.");
+
+            Console.WriteLine($"[УСПЕХ] Заметка (ID: {noteId}) успешно удалена.");
         }
     }
     #endregion

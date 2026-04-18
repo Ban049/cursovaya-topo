@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Cursah/Cursah.csproj" />
+  <Project Path="NoteService/NoteService.csproj" />
 </Solution>

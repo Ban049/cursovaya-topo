@@ -36,7 +36,7 @@ namespace Cursah
             cmd.Parameters.AddWithValue("@r", role);
             cmd.ExecuteNonQuery();
 
-            Console.WriteLine($"Пользователь {username} создан.");
+            Console.WriteLine($"[УСПЕХ] Пользователь '{username}' с ролью '{role}' успешно создан.");
         }
 
         /// <summary>
@@ -50,8 +50,12 @@ namespace Cursah
             using var reader = cmd.ExecuteReader();
 
             Console.WriteLine("\nID | Username | Role | Статус");
+            Console.WriteLine("-------------------------------------------------");
+
+            bool hasUsers = false;
             while (reader.Read())
             {
+                hasUsers = true;
                 string status = "Активен";
                 if (!reader.IsDBNull(3))
                 {
@@ -64,6 +68,12 @@ namespace Cursah
 
                 Console.WriteLine($"{reader.GetInt32(0)} | {reader.GetString(1)} | {reader.GetString(2)} | {status}");
             }
+
+            if (!hasUsers)
+            {
+                Console.WriteLine("Список пользователей пуст.");
+            }
+            Console.WriteLine("-------------------------------------------------\n");
         }
 
         /// <summary>
@@ -81,7 +91,7 @@ namespace Cursah
             {
                 throw new AppException("404", "Пользователь не найден.");
             }
-            Console.WriteLine("Пользователь удален.");
+            Console.WriteLine($"[УСПЕХ] Пользователь с ID {id} успешно удален из системы.");
         }
 
         /// <summary>
@@ -103,7 +113,7 @@ namespace Cursah
                 throw new AppException("404", "Пользователь не найден.");
             }
 
-            Console.WriteLine($"Учетная запись заблокирована на {days} дней.");
+            Console.WriteLine($"[УСПЕХ] Учетная запись (ID: {id}) успешно заблокирована на {days} дней.");
         }
     }
     #endregion
