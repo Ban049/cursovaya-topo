@@ -105,9 +105,14 @@ class Program
 
             case "user":
                 Check(Roles.Admin);
-                if (sub == "add") admin!.CreateUser(args["u"], args["p"], args["r"]);
-                else if (sub == "list") admin!.ListUsers();
-                else if (sub == "del") admin!.DeleteUser(int.Parse(args["id"]));
+                if (sub == "add")
+                    admin!.CreateUser(args["u"], args["p"], args["r"]);
+                else if (sub == "list")
+                    admin!.ListUsers();
+                else if (sub == "del")
+                    admin!.DeleteUser(int.Parse(args["id"]));
+                else if (sub == "block")
+                    admin!.BlockUser(int.Parse(args["id"]), int.Parse(args["d"]));
                 break;
 
             case "system":
@@ -202,6 +207,7 @@ class Program
         Console.WriteLine("  user add -u [name] -p [pass] -r [User|Admin|WatchdogAdmin] (Добавить пользователя)");
         Console.WriteLine("  user list (Вывести список пользователей)");
         Console.WriteLine("  user del -id [id] (Удалить пользователя)");
+        Console.WriteLine("  user block -id [id] -d [дни] (Заблокировать пользователя на N дней)");
         Console.WriteLine("  system logs -n [кол-во] (Посмотреть последние логи системы)");
         Console.WriteLine("  system update (Подготовка системы к обновлению)");
         Console.WriteLine("Доступные команды для WatchdogAdmin:");
