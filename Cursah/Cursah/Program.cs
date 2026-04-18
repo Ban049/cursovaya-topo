@@ -212,6 +212,7 @@ class Program
         Console.WriteLine("Доступные команды для WatchdogAdmin:");
         Console.WriteLine("  watchdog run (Запуск фонового сбора метрик CPU)");
         Console.WriteLine("  watchdog stop (Остановка сбора метрик)");
+        Console.WriteLine("  watchdog list (Вывод списка метрик)");
         Console.WriteLine("  watchdog config -i [секунды] (Установка интервала сбора данных)");
         Console.WriteLine("  watchdog status (Проверка состояния модуля)");
     }

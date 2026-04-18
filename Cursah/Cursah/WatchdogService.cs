@@ -9,7 +9,7 @@ namespace Cursah
 {
     #region Watchdog Service
     /// <summary>
-    /// Сервис фонового мониторинга реальных системных ресурсов.
+    /// Сервис фонового мониторинга системных ресурсов.
     /// </summary>
     public class WatchdogService
     {
@@ -62,7 +62,7 @@ namespace Cursah
                 }
                 else
                 {
-                    Console.WriteLine("[Внимание] Реальный сбор CPU/RAM поддерживается только в ОС Windows. Будут использованы нули.");
+                    Console.WriteLine("[Внимание] Cбор CPU/RAM поддерживается только в ОС Windows.");
                 }
             }
             catch (Exception ex)
@@ -73,7 +73,7 @@ namespace Cursah
             _cancellationTokenSource = new CancellationTokenSource();
             Task.Run(() => Loop(_cancellationTokenSource.Token));
 
-            Console.WriteLine("Watchdog успешно запущен (фоновый сбор реальных CPU, RAM, HDD).");
+            Console.WriteLine("Watchdog успешно запущен (фоновый сбор CPU, RAM, HDD).");
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Cursah
             Console.WriteLine($"--- Статус Watchdog ---");
             Console.WriteLine($"Состояние: {state}");
             Console.WriteLine($"Интервал:  {_interval} сек.");
-            Console.WriteLine($"Метрики:   CPU, RAM, HDD (Реальные данные)");
+            Console.WriteLine($"Метрики:   CPU, RAM, HDD");
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Cursah
         }
 
         /// <summary>
-        /// Запись реальных метрик в базу данных.
+        /// Запись метрик в базу данных.
         /// </summary>
         private async Task Loop(CancellationToken token)
         {

@@ -83,13 +83,11 @@ namespace CursahLauncher
         {
             string currentVersion = string.Empty;
 
-            // Читаем текущую (последнюю запущенную) версию из файла
             if (File.Exists(CurrentVersionFile))
             {
                 currentVersion = File.ReadAllText(CurrentVersionFile).Trim();
             }
 
-            // Если версия обновилась
             if (currentVersion != latestVersionName)
             {
                 Console.WriteLine($"Обнаружена новая версия: {latestVersionName}");
@@ -109,16 +107,18 @@ namespace CursahLauncher
 
             if (File.Exists(targetExePath))
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = targetExePath,
-                    UseShellExecute = true
-                });
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = targetExePath;
+                startInfo.UseShellExecute = true; 
+
+                Process.Start(startInfo);
+
+                Environment.Exit(0);
             }
             else
             {
                 Console.WriteLine($"[ОШИБКА] Исполняемый файл не найден по пути: {targetExePath}");
-                Console.ReadLine();
+                Console.ReadLine(); 
             }
         }
         #endregion
