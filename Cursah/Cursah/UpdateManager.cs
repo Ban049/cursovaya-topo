@@ -12,7 +12,8 @@ namespace Cursah
         private const string BaseUpdateFolder = @"D:\Учёба\3 курс\2 сем\Тестирование и отладка ПО\Курсач\NoteService";
 
         /// <summary>
-        /// Сканирует существующие версии, вычисляет новую и создает для нее папку.
+        /// Сканирует существующие версии, вычисляет новую (+1), создает для нее папку 
+        /// и копирует туда текущий файл конфигурации.
         /// </summary>
         public static void PrepareUpdate()
         {
@@ -29,12 +30,21 @@ namespace Cursah
 
                 Directory.CreateDirectory(newVersionDir);
 
+                // АВТОМАТИЗАЦИЯ: Копируем appsettings.json в новую папку
+                string currentSettingsPath = "appsettings.json";
+                if (File.Exists(currentSettingsPath))
+                {
+                    string targetSettingsPath = Path.Combine(newVersionDir, "appsettings.json");
+                    File.Copy(currentSettingsPath, targetSettingsPath, overwrite: true);
+                }
+
                 Console.WriteLine("--------------------------------------------------");
                 Console.WriteLine($"[СИСТЕМА] Подготовлена папка для новой версии: {nextVersionName}");
                 Console.WriteLine($"Путь: {newVersionDir}");
+                Console.WriteLine("[СИСТЕМА] Файл настроек appsettings.json скопирован автоматически.");
                 Console.WriteLine("Действия для обновления:");
                 Console.WriteLine("1. Скомпилируйте новую версию проекта.");
-                Console.WriteLine("2. Вручную скопируйте новый Cursah.exe в созданную папку.");
+                Console.WriteLine("2. Вручную скопируйте ТОЛЬКО новый Cursah.exe в созданную папку.");
                 Console.WriteLine("3. Закройте эту программу (команда exit).");
                 Console.WriteLine("4. Запустите Лаунчер.");
                 Console.WriteLine("--------------------------------------------------");
@@ -46,7 +56,7 @@ namespace Cursah
         }
 
         /// <summary>
-        /// Ищет максимальную версию в папке и возвращает версию.
+        /// Ищет максимальную версию в папке и возвращает версию + 1.
         /// </summary>
         private static string GetNextVersionName()
         {
@@ -74,7 +84,6 @@ namespace Cursah
                 }
             }
 
-            // Если папок с версиями вообще нет, возвращаем стартовую 1.0.0
             if (!foundAny)
             {
                 return "v-1.0.0";
