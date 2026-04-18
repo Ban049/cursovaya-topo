@@ -1,7 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cursah
 {
@@ -40,6 +38,7 @@ namespace Cursah
 
             Console.WriteLine($"Пользователь {username} создан.");
         }
+
         /// <summary>
         /// Вывод списка пользователей.
         /// </summary>
@@ -47,15 +46,26 @@ namespace Cursah
         {
             using var conn = new SqlConnection(_connectionString);
             conn.Open();
-            var cmd = new SqlCommand("SELECT Id, Username, Role FROM Users", conn);
+            var cmd = new SqlCommand("SELECT Id, Username, Role, BlockedUntil FROM Users", conn);
             using var reader = cmd.ExecuteReader();
 
-            Console.WriteLine("\nID | Username | Role");
+            Console.WriteLine("\nID | Username | Role | Статус");
             while (reader.Read())
             {
-                Console.WriteLine($"{reader.GetInt32(0)} | {reader.GetString(1)} | {reader.GetString(2)}");
+                string status = "Активен";
+                if (!reader.IsDBNull(3))
+                {
+                    DateTime blockedUntil = reader.GetDateTime(3);
+                    if (blockedUntil > DateTime.Now)
+                    {
+                        status = $"Заблокирован до {blockedUntil:dd.MM.yyyy}";
+                    }
+                }
+
+                Console.WriteLine($"{reader.GetInt32(0)} | {reader.GetString(1)} | {reader.GetString(2)} | {status}");
             }
         }
+
         /// <summary>
         /// Удаление пользователя.
         /// </summary>
@@ -72,6 +82,28 @@ namespace Cursah
                 throw new AppException("404", "Пользователь не найден.");
             }
             Console.WriteLine("Пользователь удален.");
+        }
+
+        /// <summary>
+        /// Блокировка пользователя на указанное количество дней.
+        /// </summary>
+        public void BlockUser(int id, int days)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            // DATEADD прибавляет указанное количество дней к текущей дате
+            var cmd = new SqlCommand("UPDATE Users SET BlockedUntil = DATEADD(day, @d, GETDATE()) WHERE Id = @id", conn);
+            cmd.Parameters.AddWithValue("@d", days);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            int rows = cmd.ExecuteNonQuery();
+            if (rows == 0)
+            {
+                throw new AppException("404", "Пользователь не найден.");
+            }
+
+            Console.WriteLine($"Учетная запись заблокирована на {days} дней.");
         }
     }
     #endregion
