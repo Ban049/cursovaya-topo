@@ -68,7 +68,7 @@ namespace Cursah
             if (File.Exists(SessionFile))
             {
                 File.Delete(SessionFile);
-                Console.WriteLine("[ИНФО] Локальный файл сессии очищен.");
+                Console.WriteLine("[ИНФОРМАЦИЯ] Локальный файл сессии очищен.");
             }
         }
 

@@ -17,7 +17,7 @@ namespace CursahLauncher
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.WriteLine("=== Cursah Launcher ===");
+            Console.WriteLine("Запуск программы NoteService");
 
             if (!Directory.Exists(NoteBookFolder))
             {
