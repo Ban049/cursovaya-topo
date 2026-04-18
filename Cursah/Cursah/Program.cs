@@ -22,7 +22,6 @@ class Program
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-        UpdateManager.ApplyPendingUpdate();
 
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         connStr = config.GetConnectionString("DefaultConnection");
