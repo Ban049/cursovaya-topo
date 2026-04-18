@@ -87,7 +87,7 @@ namespace Cursah
                 var user = JsonSerializer.Deserialize<User>(File.ReadAllText(SessionFile));
                 if (user != null)
                 {
-                    Console.WriteLine($"[ИНФО] Автоматический вход выполнен ({user.Username}).");
+                    Console.WriteLine($"[ИНФОРМАЦИЯ] Автоматический вход выполнен ({user.Username}).");
                 }
                 return user;
             }
