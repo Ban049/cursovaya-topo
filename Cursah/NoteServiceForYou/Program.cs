@@ -60,7 +60,7 @@ namespace CursahLauncher
 
                 if (folderName.StartsWith("v-"))
                 {
-                    string versionString = folderName.Substring(2); 
+                    string versionString = folderName.Substring(2);
 
                     if (Version.TryParse(versionString, out Version parsedVersion))
                     {
@@ -109,7 +109,7 @@ namespace CursahLauncher
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = targetExePath;
-                startInfo.UseShellExecute = true; 
+                startInfo.UseShellExecute = true;
 
                 Process.Start(startInfo);
 
@@ -118,7 +118,7 @@ namespace CursahLauncher
             else
             {
                 Console.WriteLine($"[ОШИБКА] Исполняемый файл не найден по пути: {targetExePath}");
-                Console.ReadLine(); 
+                Console.ReadLine();
             }
         }
         #endregion
