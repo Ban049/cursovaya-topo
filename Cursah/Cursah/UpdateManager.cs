@@ -24,13 +24,12 @@ namespace Cursah
                     Directory.CreateDirectory(BaseUpdateFolder);
                 }
 
-                // Получаем название следующей версии
+
                 string nextVersionName = GetNextVersionName();
                 string newVersionDir = Path.Combine(BaseUpdateFolder, nextVersionName);
 
                 Directory.CreateDirectory(newVersionDir);
 
-                // АВТОМАТИЗАЦИЯ: Копируем appsettings.json в новую папку
                 string currentSettingsPath = "appsettings.json";
                 if (File.Exists(currentSettingsPath))
                 {
@@ -44,7 +43,7 @@ namespace Cursah
                 Console.WriteLine("[СИСТЕМА] Файл настроек appsettings.json скопирован автоматически.");
                 Console.WriteLine("Действия для обновления:");
                 Console.WriteLine("1. Скомпилируйте новую версию проекта.");
-                Console.WriteLine("2. Вручную скопируйте ТОЛЬКО новый Cursah.exe в созданную папку.");
+                Console.WriteLine("2. Вручную скопируйте новый Cursah.exe в созданную папку.");
                 Console.WriteLine("3. Закройте эту программу (команда exit).");
                 Console.WriteLine("4. Запустите Лаунчер.");
                 Console.WriteLine("--------------------------------------------------");

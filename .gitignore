@@ -10,7 +10,10 @@ obj/
 *.suo
 *.user
 
-# Личные файлы (не код)
+# Личные файлы 
 *.xlsx
-
+*.pptx
+*.docx
 NoteService/
+
+Application Files/
