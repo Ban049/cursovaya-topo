@@ -30,7 +30,7 @@ namespace Cursah
 
                 Directory.CreateDirectory(newVersionDir);
 
-                string currentSettingsPath = "appsettings.json";
+                string currentSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
                 if (File.Exists(currentSettingsPath))
                 {
                     string targetSettingsPath = Path.Combine(newVersionDir, "appsettings.json");
