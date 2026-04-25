@@ -38,18 +38,16 @@ namespace Cursah
                 // Сначала проверяем правильность пароля
                 if (BCrypt.Net.BCrypt.Verify(password, reader.GetString(2)))
                 {
-                    // ДОБАВЛЕНО: Проверка блокировки
+                    // Проверка блокировки
                     if (!reader.IsDBNull(4))
                     {
                         DateTime blockedUntil = reader.GetDateTime(4);
                         if (blockedUntil > DateTime.Now)
                         {
-                            // Если время блокировки еще не прошло, не пускаем
-                            throw new AppException("403", $"Ваша учетная запись заблокирована до {blockedUntil:dd.MM.yyyy HH:mm}.");
+                           throw new AppException("403", $"Ваша учетная запись заблокирована до {blockedUntil:dd.MM.yyyy HH:mm}.");
                         }
                     }
 
-                    // Если все проверки пройдены, создаем сессию
                     var user = new User(reader.GetInt32(0), reader.GetString(1), reader.GetString(3));
                     File.WriteAllText(SessionFile, JsonSerializer.Serialize(user));
 

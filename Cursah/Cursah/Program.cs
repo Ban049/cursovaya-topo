@@ -75,19 +75,12 @@ class Program
         {
             case "login":
                 currentUser = auth!.Login(args.GetValueOrDefault("u", ""), args.GetValueOrDefault("p", ""));
-                Console.WriteLine($"Добро пожаловать, {currentUser.Username}!");
                 break;
 
             case "logout":
                 auth!.Logout();
                 currentUser = null;
                 Console.WriteLine("Вы вышли из системы.");
-
-                if (File.Exists("update.pending"))
-                {
-                    Console.WriteLine("Ожидает установка обновления. Завершение работы...");
-                    Environment.Exit(0);
-                }
                 break;
 
             case "note":
