@@ -59,6 +59,10 @@ user add -u Test -p 12345 -r User
 ```bash
 user block -id 10 -d 1
 ```
+*   **`user unblock -id [ID] `** — Разблокировка учетной записи пользователя.
+```bash
+user unblock -id 10
+```
 *   **`user del -id [ID]`** — Полное удаление пользователя из БД.
 ```bash
 user del -id 6
