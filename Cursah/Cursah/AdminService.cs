@@ -115,6 +115,26 @@ namespace Cursah
 
             Console.WriteLine($"[УСПЕХ] Учетная запись (ID: {id}) успешно заблокирована на {days} дней.");
         }
+
+        /// <summary>
+        /// Разблокировка пользователя (снятие временной блокировки).
+        /// </summary>
+        public void UnblockUser(int id)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+
+            var cmd = new SqlCommand("UPDATE Users SET BlockedUntil = NULL WHERE Id = @id", conn);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            int rows = cmd.ExecuteNonQuery();
+            if (rows == 0)
+            {
+                throw new AppException("404", "Пользователь не найден.");
+            }
+
+            Console.WriteLine($"Учетная запись (ID: {id}) успешно разблокирована.");
+        }
     }
     #endregion
 }
