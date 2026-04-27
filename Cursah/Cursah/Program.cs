@@ -200,6 +200,7 @@ class Program
         Console.WriteLine("  user list (Вывести список пользователей)");
         Console.WriteLine("  user del -id [id] (Удалить пользователя)");
         Console.WriteLine("  user block -id [id] -d [дни] (Заблокировать пользователя на N дней)");
+        Console.WriteLine("  user unblock -id [id] (Разаблокировать пользователя)");
         Console.WriteLine("  system logs -n [кол-во] (Посмотреть последние логи системы)");
         Console.WriteLine("  system update (Подготовка системы к обновлению)");
         Console.WriteLine("Доступные команды для WatchdogAdmin:");
