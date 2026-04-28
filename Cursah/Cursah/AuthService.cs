@@ -36,7 +36,6 @@ namespace Cursah
             {
                 if (BCrypt.Net.BCrypt.Verify(password, reader.GetString(2)))
                 {
-                    // Проверка блокировки
                     if (!reader.IsDBNull(4))
                     {
                         DateTime blockedUntil = reader.GetDateTime(4);

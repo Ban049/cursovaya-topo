@@ -80,7 +80,7 @@ namespace Cursah
                 Console.WriteLine("У вас пока нет ни одной заметки. Используйте 'note add', чтобы создать первую.");
                 Console.WriteLine("--------------------");
             }
-            Console.WriteLine(); // Пустая строка для красоты вывода
+            Console.WriteLine(); 
         }
 
         /// <summary>
