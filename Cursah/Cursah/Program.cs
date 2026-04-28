@@ -105,6 +105,8 @@ class Program
                     admin!.DeleteUser(int.Parse(args["id"]));
                 else if (sub == "block")
                     admin!.BlockUser(int.Parse(args["id"]), int.Parse(args["d"]));
+                else if (sub == "unblock")
+                    admin!.UnblockUser(int.Parse(args["id"]));
                 break;
 
             case "system":

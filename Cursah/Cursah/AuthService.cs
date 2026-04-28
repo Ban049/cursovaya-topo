@@ -28,14 +28,12 @@ namespace Cursah
             using var conn = new SqlConnection(_connectionString);
             conn.Open();
 
-            // ДОБАВЛЕНО: Выборка поля BlockedUntil (оно под индексом 4)
             var cmd = new SqlCommand("SELECT Id, Username, PasswordHash, Role, BlockedUntil FROM Users WHERE Username = @u", conn);
             cmd.Parameters.AddWithValue("@u", username);
 
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                // Сначала проверяем правильность пароля
                 if (BCrypt.Net.BCrypt.Verify(password, reader.GetString(2)))
                 {
                     // Проверка блокировки
