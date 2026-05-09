@@ -54,7 +54,6 @@ class Program
             catch (SqlException ex)
             {
                 Console.WriteLine("\n[КРИТИЧЕСКАЯ ОШИБКА] Нет подключения к базе данных.");
-                Console.WriteLine("Возможно, сервер БД выключен или указан неверный пароль в appsettings.json.\n");
 
                 Logger.Log("CRITICAL", "Database", "Ошибка подключения или выполнения SQL-запроса", currentUser?.Id, ex);
             }
