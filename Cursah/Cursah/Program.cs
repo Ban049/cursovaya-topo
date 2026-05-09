@@ -22,7 +22,6 @@ class Program
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-
         var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         connStr = config.GetConnectionString("DefaultConnection");
 
@@ -52,8 +51,16 @@ class Program
             {
                 Console.WriteLine($"[!] {ex.Message}");
             }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("\n[КРИТИЧЕСКАЯ ОШИБКА] Нет подключения к базе данных.");
+                Console.WriteLine("Возможно, сервер БД выключен или указан неверный пароль в appsettings.json.\n");
+
+                Logger.Log("CRITICAL", "Database", "Ошибка подключения или выполнения SQL-запроса", currentUser?.Id, ex);
+            }
             catch (Exception ex)
             {
+                Console.WriteLine($"\n[СИСТЕМНАЯ ОШИБКА] Произошел непредвиденный сбой: {ex.Message}\n");
                 Logger.Log("ERROR", "Main", ex.Message, currentUser?.Id, ex);
             }
         }
