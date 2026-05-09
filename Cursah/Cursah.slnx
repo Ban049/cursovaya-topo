@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="Cursah/Cursah.csproj" />
   <Project Path="NoteServiceForYou/NoteServiceForYou.csproj" Id="0decffd5-14a4-4281-91ae-c4dc2913c70a" />
+  <Project Path="TestUnit/TestUnit.csproj" Id="ffe2094e-1148-4e96-ab38-60ccb22af7cd" />
 </Solution>
