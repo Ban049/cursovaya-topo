@@ -7,18 +7,22 @@ namespace TestDll
     [TestClass]
     public class UnitTest_Update
     {
+        /// <summary>
+        /// Позитивный тест: Подготовка директории обновления.
+        /// </summary>
         [TestMethod]
         public void PrepareUpdate_ExecutesAndCreatesDirectory()
         {
-            // Act: Запускаем статический метод
-            UpdateManager.PrepareUpdate();
-
-            // Assert: Проверяем, что базовая папка была создана
-            // D:\Учёба\3 курс\2 сем\Тестирование и отладка ПО\Курсач\NoteService
+            // #Act – Инициализация
             string expectedBasePath = @"D:\Учёба\3 курс\2 сем\Тестирование и отладка ПО\Курсач\NoteService";
+            bool expectedResult = true;
 
-            bool dirExists = Directory.Exists(expectedBasePath);
-            Assert.IsTrue(dirExists, "Базовая папка для обновлений не была создана.");
+            // #Action – что мы должны сделать
+            UpdateManager.PrepareUpdate();
+            bool actualResult = Directory.Exists(expectedBasePath);
+
+            // #Result
+            Assert.AreEqual(expectedResult, actualResult);
         }
     }
 }

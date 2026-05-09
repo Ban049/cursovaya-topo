@@ -10,30 +10,47 @@ namespace TestDll
         private readonly string validConnStr = "Server=CERTAINPOINT\\SQLEXPRESS;Database=AppForNote;Trusted_Connection=True;TrustServerCertificate=True;";
         private readonly string invalidConnStr = "Server=NoConn\\SQLEXPRESS;Database=AppForNote;Trusted_Connection=True;TrustServerCertificate=True;";
 
+        /// <summary>
+        /// Позитивный тест: Успешное подключение к БД с корректной строкой.
+        /// </summary>
         [TestMethod]
         public void DbConnection_ValidString_OpensSuccessfully()
         {
-            using var conn = new SqlConnection(validConnStr);
-            conn.Open();
+            // #Act – Инициализация
+            string connStr = validConnStr;
+            ConnectionState expected = ConnectionState.Open;
 
-            Assert.AreEqual(ConnectionState.Open, conn.State);
+            // #Action – что мы должны сделать
+            using var conn = new SqlConnection(connStr);
+            conn.Open();
+            ConnectionState actual = conn.State;
+
+            // #Result
+            Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Негативный тест: Ошибка при попытке подключения с неверным сервером.
+        /// </summary>
         [TestMethod]
         public void DbConnection_InvalidString_ThrowsSqlException()
         {
+            // #Act – Инициализация
+            string connStr = invalidConnStr;
+
+            // #Action – что мы должны сделать
             try
             {
-                // Пробуем подключиться с некорректной строкой
-                using var conn = new SqlConnection(invalidConnStr);
+                using var conn = new SqlConnection(connStr);
                 conn.Open();
 
-                // Если код дошел до этой строчки (ошибки не было) 
-                Assert.Fail("Ожидалась ошибка SqlException");
+                // #Result (если код дошел сюда - ошибка)
+                Assert.Fail("Ожидалась ошибка SqlException, но подключение прошло успешно.");
             }
             catch (SqlException)
             {
-                // Тест пройден
+                // #Result (успешная отработка негативного теста)
+                Assert.IsTrue(true);
             }
         }
     }

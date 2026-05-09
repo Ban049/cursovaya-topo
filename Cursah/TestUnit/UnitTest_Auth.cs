@@ -8,74 +8,105 @@ namespace TestDll
     {
         private readonly string connStr = "Server=CERTAINPOINT\\SQLEXPRESS;Database=AppForNote;Trusted_Connection=True;TrustServerCertificate=True;";
 
+        /// <summary>
+        /// Позитивный тест: Успешная авторизация пользователя.
+        /// </summary>
         [TestMethod]
-        public void Login_ValidPassword()
+        public void Login_ValidCredentials_ExecutesSuccessfully()
         {
+            // #Act – Инициализация
             AuthService authService = new AuthService(connStr);
             string testUser = "User1";
-            string wrongPass = "1qaz!QAZ";
+            string validPass = "1qaz!QAZ";
 
+            // #Action – что мы должны сделать
             try
             {
-                authService.Login(testUser, wrongPass);
-                // Тест пройден
+                authService.Login(testUser, validPass);
+
+                // #Result
+                Assert.IsTrue(true);
             }
             catch (AppException)
             {
-                Assert.Fail("Ожидалось успешное вхождение");
-
+                // #Result
+                Assert.Fail("Ожидалась успешная авторизация, но получена ошибка.");
             }
         }
 
+        /// <summary>
+        /// Негативный тест: Попытка входа заблокированного пользователя.
+        /// </summary>
         [TestMethod]
-        public void Login_BlockUser()
+        public void Login_BlockedUser_ThrowsAppException()
         {
+            // #Act – Инициализация
             AuthService authService = new AuthService(connStr);
             string testUser = "Block";
-            string wrongPass = "1qaz!QAZ";
+            string validPass = "1qaz!QAZ";
 
+            // #Action – что мы должны сделать
             try
             {
-                authService.Login(testUser, wrongPass);
-                Assert.Fail("Ожидалась ошибка авторизации, но вход был выполнен");
+                authService.Login(testUser, validPass);
+
+                // #Result
+                Assert.Fail("Ожидалась ошибка блокировки, но вход был выполнен.");
             }
             catch (AppException)
             {
-                // Тест пройден
+                // #Result
+                Assert.IsTrue(true);
             }
         }
 
+        /// <summary>
+        /// Негативный тест: Попытка входа с неверным паролем.
+        /// </summary>
         [TestMethod]
         public void Login_InvalidPassword_ThrowsAppException()
         {
+            // #Act – Инициализация
             AuthService authService = new AuthService(connStr);
             string testUser = "User1";
             string wrongPass = "123";
 
+            // #Action – что мы должны сделать
             try
             {
                 authService.Login(testUser, wrongPass);
-                Assert.Fail("Ожидалась ошибка авторизации, но вход был выполнен");
+
+                // #Result
+                Assert.Fail("Ожидалась ошибка неверного пароля, но вход был выполнен.");
             }
             catch (AppException)
             {
-                // Тест пройден
+                // #Result
+                Assert.IsTrue(true);
             }
         }
 
+        /// <summary>
+        /// Негативный тест: Попытка входа под несуществующим логином.
+        /// </summary>
         [TestMethod]
         public void Login_NonExistentUser_ThrowsAppException()
         {
+            // #Act – Инициализация
             AuthService authService = new AuthService(connStr);
 
+            // #Action – что мы должны сделать
             try
             {
                 authService.Login("NoUser123", "12345");
-                Assert.Fail("Ожидалась ошибка, но несуществующий пользователь вошел в систему!");
+
+                // #Result
+                Assert.Fail("Ожидалась ошибка, но несуществующий пользователь вошел в систему.");
             }
             catch (AppException)
             {
-                // Тест пройден
+                // #Result
+                Assert.IsTrue(true);
             }
         }
     }

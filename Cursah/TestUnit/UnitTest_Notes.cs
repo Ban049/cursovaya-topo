@@ -9,93 +9,131 @@ namespace TestDll
         private readonly string connStr = "Server=CERTAINPOINT\\SQLEXPRESS;Database=AppForNote;Trusted_Connection=True;TrustServerCertificate=True;";
         private readonly int testUserId = 4;
 
+        /// <summary>
+        /// Позитивный тест: Создание новой заметки.
+        /// </summary>
         [TestMethod]
-        public void AddNote_ValidData()
+        public void AddNote_ValidData_ExecutesWithoutErrors()
         {
+            // #Act – Инициализация
             NoteService noteService = new NoteService(connStr);
+            string title = "Тестовый заголовок";
+            string content = "Содержимое из Unit Теста";
 
+            // #Action – что мы должны сделать
             try
             {
-                
-                noteService.Add(testUserId, "Тестовый заголовок", "Содержимое из Unit Теста");
+                noteService.Add(testUserId, title, content);
 
+                // #Result
+                Assert.IsTrue(true);
             }
             catch (AppException)
             {
-                Assert.Fail("Ожидалось успешное добавление");
+                // #Result
+                Assert.Fail("Ожидалось успешное добавление заметки.");
             }
-
-
         }
 
+        /// <summary>
+        /// Позитивный тест: Редактирование существующей заметки.
+        /// </summary>
         [TestMethod]
-        public void EditNote_ValidData()
+        public void EditNote_ValidData_ExecutesWithoutErrors()
         {
-            int NoteId = 8;
+            // #Act – Инициализация
+            int noteId = 8;
             NoteService noteService = new NoteService(connStr);
+            string newTitle = "Редактирование";
+            string newContent = "Содержимое из Unit Теста";
 
-
+            // #Action – что мы должны сделать
             try
             {
-                noteService.Edit(testUserId, NoteId, "Редактирование", "Содержимое из Unit Теста");
+                noteService.Edit(testUserId, noteId, newTitle, newContent);
 
+                // #Result
+                Assert.IsTrue(true);
             }
             catch (AppException)
             {
-                Assert.Fail("Ожидалось успешное редактирование");
+                // #Result
+                Assert.Fail("Ожидалось успешное редактирование заметки.");
             }
-
         }
 
+        /// <summary>
+        /// Негативный тест: Попытка редактирования несуществующей заметки.
+        /// </summary>
         [TestMethod]
-        public void InvalidEditNote_ValidData()
+        public void EditNote_NonExistentId_ThrowsAppException()
         {
-            int NoteId = 9999;
+            // #Act – Инициализация
+            int fakeNoteId = 9999;
             NoteService noteService = new NoteService(connStr);
+
+            // #Action – что мы должны сделать
             try
             {
-                noteService.Edit(testUserId, NoteId, "Редактирование2", "Содержимое из Unit Теста");
-                Assert.Fail("Ожидалась ошибка, но редактирование прошло успешно");
+                noteService.Edit(testUserId, fakeNoteId, "Редактирование2", "Содержимое из Unit Теста");
+
+                // #Result
+                Assert.Fail("Ожидалась ошибка 404, но редактирование прошло успешно.");
             }
             catch (AppException)
             {
-                // Успех, система не дала удалить несуществующую заметку
+                // #Result
+                Assert.IsTrue(true);
             }
-
-
         }
 
+        /// <summary>
+        /// Позитивный тест: Успешное удаление заметки.
+        /// </summary>
         [TestMethod]
-        public void DeleteNote_ExistentNoteId()
+        public void DeleteNote_ExistentNoteId_ExecutesWithoutErrors()
         {
+            // #Act – Инициализация
             NoteService noteService = new NoteService(connStr);
-            int NoteId = 12;
+            int noteId = 12;
 
+            // #Action – что мы должны сделать
             try
             {
-                noteService.Delete(testUserId, NoteId);
+                noteService.Delete(testUserId, noteId);
 
+                // #Result
+                Assert.IsTrue(true);
             }
             catch (AppException)
             {
-                Assert.Fail("Ожидалось успешное удаление");
+                // #Result
+                Assert.Fail("Ожидалось успешное удаление заметки.");
             }
         }
 
+        /// <summary>
+        /// Негативный тест: Попытка удаления несуществующей заметки.
+        /// </summary>
         [TestMethod]
-        public void DeleteNote_NonExistentNoteId()
+        public void DeleteNote_NonExistentNoteId_ThrowsAppException()
         {
+            // #Act – Инициализация
             NoteService noteService = new NoteService(connStr);
             int fakeNoteId = 99999;
 
+            // #Action – что мы должны сделать
             try
             {
                 noteService.Delete(testUserId, fakeNoteId);
-                Assert.Fail("Ожидалась ошибка 404, но удаление прошло успешно!");
+
+                // #Result
+                Assert.Fail("Ожидалась ошибка 404, но удаление прошло успешно.");
             }
             catch (AppException)
             {
-                // Успех, система не дала удалить несуществующую заметку
+                // #Result
+                Assert.IsTrue(true);
             }
         }
     }
