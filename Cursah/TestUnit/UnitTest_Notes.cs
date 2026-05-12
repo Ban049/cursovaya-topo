@@ -78,7 +78,7 @@ namespace TestDll
                 noteService.Edit(testUserId, fakeNoteId, "Редактирование2", "Содержимое из Unit Теста");
 
                 // #Result
-                Assert.Fail("Ожидалась ошибка 404, но редактирование прошло успешно.");
+                Assert.Fail("Ожидалась ошибка, но редактирование прошло успешно.");
             }
             catch (AppException)
             {
@@ -128,7 +128,7 @@ namespace TestDll
                 noteService.Delete(testUserId, fakeNoteId);
 
                 // #Result
-                Assert.Fail("Ожидалась ошибка 404, но удаление прошло успешно.");
+                Assert.Fail("Ожидалась ошибка, но удаление прошло успешно.");
             }
             catch (AppException)
             {
