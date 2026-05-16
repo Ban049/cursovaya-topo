@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestData>
+	<!-- База данных -->
+	<Db valid="Server=CERTAINPOINT\SQLEXPRESS;Database=AppForNote;Trusted_Connection=True;TrustServerCertificate=True;"
+		invalid="Server=NoConn\SQLEXPRESS;Database=AppForNote;Trusted_Connection=True;TrustServerCertificate=True;" />
+
+	<!-- Авторизация -->
+	<Auth validUser="User1" validPass="1qaz!QAZ" blockUser="Block" invalidUser="NoUser" />
+
+	<!-- Для мульти-теста -->
+	<BadPass user="User1" pass="WrongPass123" />
+	<BadPass user="User1" pass="234" />
+
+	<!-- Заметки -->
+	<Notes uId="4" nId="14" nrId="15" fakeId="9999" title="Тест" content="Описание" newTitle="Новый" />
+
+	<!-- Обновления -->
+	<Update basePath="D:\Учёба\3 курс\2 сем\Тестирование и отладка ПО\Курсач\NoteService" />
+</TestData>
