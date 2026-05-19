@@ -66,10 +66,11 @@ namespace TestDll
             // #Act – Инициализация
             XDocument xml = XDocument.Load("TestParam.xml");
             string badUser = xml.Root.Element("Auth").Attribute("invalidUser").Value;
+            string pass = xml.Root.Element("Auth").Attribute("validPass").Value;
             AuthService auth = new AuthService(connStr);
 
             // #Action & #Result
-            Assert.Throws<AppException>(() => auth.Login(badUser, "12345"));
+            Assert.Throws<AppException>(() => auth.Login(badUser, pass));
         }
 
         /// <summary>

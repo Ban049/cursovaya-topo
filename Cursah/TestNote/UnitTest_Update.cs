@@ -27,40 +27,47 @@ namespace TestDll
 
         /// <summary>
         /// Позитивный тест: Лаунчер обнаруживает новую версию.
+        /// Тестируем метод IsUpdateRequired из CursahLauncher.
         /// </summary>
         [Fact]
         [Trait("Category", "Обновления")]
         public void Launcher_DetectsNewVersion()
         {
-            // #Act – Инициализация
-            string currentVersionFile = "current_version.txt";
-            File.WriteAllText(currentVersionFile, "v-1.0.3");
+            // #Arrange – Инициализация
+            string testVersionFile = "test_current_version_1.txt";
+            File.WriteAllText(testVersionFile, "v-1.0.3"); // У нас старая версия
+            string serverVersion = "v-1.0.4";              // На сервере новая
 
-            // #Action – что мы должны сделать
-            string fileContent = File.ReadAllText(currentVersionFile);
-            bool isUpdateNeeded = (fileContent != "v-1.0.4");
+            // #Act – Вызываем код лаунчера
+            bool isUpdateNeeded = CursahLauncher.Program.IsUpdateRequired(testVersionFile, serverVersion);
 
-            // #Result
+            // #Assert – Проверка результата
             Assert.True(isUpdateNeeded);
+
+            if (File.Exists(testVersionFile)) File.Delete(testVersionFile);
         }
 
         /// <summary>
         /// Позитивный тест: Лаунчер запускается без новых обновлений.
+        /// Тестируем реальный метод IsUpdateRequired из CursahLauncher.
         /// </summary>
         [Fact]
         [Trait("Category", "Обновления")]
         public void Launcher_NoUpdates_StartsNormal()
         {
-            // #Act – Инициализация
-            string currentVersionFile = "current_version.txt";
-            File.WriteAllText(currentVersionFile, "v-1.0.3"); 
+            // #Arrange – Инициализация
+            string testVersionFile = "test_current_version_2.txt";
+            File.WriteAllText(testVersionFile, "v-1.0.3"); 
+            string serverVersion = "v-1.0.3";              
 
-            // #Action – что мы должны сделать
-            string fileContent = File.ReadAllText(currentVersionFile);
-            bool isUpdateNeeded = (fileContent != "v-1.0.3");
+            // #Act – Вызываем код лаунчера
+            bool isUpdateNeeded = CursahLauncher.Program.IsUpdateRequired(testVersionFile, serverVersion);
 
-            // #Result
+            // #Assert – Проверка результата
             Assert.False(isUpdateNeeded);
+
+            // Очистка
+            if (File.Exists(testVersionFile)) File.Delete(testVersionFile);
         }
 
         /// <summary>

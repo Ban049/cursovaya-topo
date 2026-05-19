@@ -52,7 +52,7 @@ namespace CursahLauncher
         {
             if (!File.Exists(currentVersionFilePath))
             {
-                return true; 
+                return true;
             }
 
             string currentVersion = File.ReadAllText(currentVersionFilePath).Trim();

@@ -82,7 +82,7 @@ namespace TestDll
             NoteService notes = new NoteService(connStr);
 
             // #Action & #Result
-            Assert.Throws<AppException>(() => notes.Edit(uId, fakeId, "Не выйдет", "..."));
+            Assert.Throws<AppException>(() => notes.Edit(uId, fakeId, "Ошибка", "..."));
         }
 
         /// <summary>
