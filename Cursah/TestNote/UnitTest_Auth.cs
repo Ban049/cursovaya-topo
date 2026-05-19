@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TestDll
 {
-    public class UnitTest_Auth
+    public class UnitTest_Auth 
     {
         private readonly string connStr = "Server=CERTAINPOINT\\SQLEXPRESS;Database=AppForNote;Trusted_Connection=True;TrustServerCertificate=True;";
 
@@ -18,6 +18,7 @@ namespace TestDll
         [Trait("Category", "Авторизация")]
         public void Login_ValidCredentials()
         {
+            //#Act
             XDocument xml = XDocument.Load("TestParam.xml");
             string user = xml.Root.Element("Auth").Attribute("validUser").Value;
             string pass = xml.Root.Element("Auth").Attribute("validPass").Value;
@@ -26,6 +27,7 @@ namespace TestDll
             // #Action – сохраняем результат работы метода в переменную
             User loggedInUser = auth.Login(user, pass);
 
+            //#Result
             Assert.Equal(user, loggedInUser.Username);
         }
 
