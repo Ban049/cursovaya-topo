@@ -18,17 +18,15 @@ namespace TestDll
         [Trait("Category", "Авторизация")]
         public void Login_ValidCredentials()
         {
-            // #Act – Инициализация
             XDocument xml = XDocument.Load("TestParam.xml");
             string user = xml.Root.Element("Auth").Attribute("validUser").Value;
             string pass = xml.Root.Element("Auth").Attribute("validPass").Value;
             AuthService auth = new AuthService(connStr);
 
-            // #Action – что мы должны сделать
-            auth.Login(user, pass);
+            // #Action – сохраняем результат работы метода в переменную
+            User loggedInUser = auth.Login(user, pass);
 
-            // #Result
-            Assert.True(true);
+            Assert.Equal(user, loggedInUser.Username);
         }
 
         public static IEnumerable<object[]> GetBadPasswords()
@@ -106,6 +104,7 @@ namespace TestDll
 
             // #Result
             Assert.NotNull(loadedUser);
+            if (File.Exists(".session")) File.Delete(".session");
         }
 
         /// <summary>
